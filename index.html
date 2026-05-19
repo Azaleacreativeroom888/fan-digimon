@@ -3,109 +3,384 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixar Fan Log</title>
+  <title>Digital World Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", sans-serif;
-      background-color: #F7A1C4;
-      color: black;
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --accent: #00f0ff;
+      --accent2: #ff6ec7;
+      --accent3: #7fff7f;
+      --text: #d4e8ff;
+      --muted: #5a7a9a;
+      --border: #1e3a5f;
+      --glow: 0 0 12px rgba(0, 240, 255, 0.4);
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- scanline & noise overlay --- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0,0,0,0.08) 2px,
+          rgba(0,0,0,0.08) 4px
+        );
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* --- HEADER --- */
     header {
-      padding: 20px;
+      padding: 28px 20px 18px;
       text-align: center;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      background: linear-gradient(180deg, rgba(0,240,255,0.04) 0%, transparent 100%);
+    }
+
+    .header-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
     }
 
     header h1 {
-      margin: 0;
-      font-size: 28px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 32px;
+      letter-spacing: 6px;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      animation: flicker 6s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.7; }
+      97% { opacity: 1; }
+      98% { opacity: 0.5; }
+      99% { opacity: 1; }
+    }
+
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
       letter-spacing: 2px;
+      margin-top: 6px;
     }
 
     nav {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 10px;
+      gap: 30px;
+      margin-top: 16px;
     }
 
     nav a {
-      color: #aaa;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--muted);
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      transition: color 0.2s, text-shadow 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
     }
 
     nav a:hover {
-      color: #fff;
+      color: var(--accent);
+      text-shadow: var(--glow);
     }
+    nav a:hover::after { width: 100%; }
 
+    /* --- CONTAINER --- */
     .container {
-      padding: 20px;
       max-width: 900px;
       margin: auto;
+      padding: 30px 20px;
     }
 
+    /* --- INTRO --- */
     .intro {
-      margin-bottom: 30px;
-      line-height: 1.6;
-      color: black;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
     }
 
+    .intro::before {
+      content: '// SYSTEM LOG';
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .intro p {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    .intro .cursor {
+      display: inline-block;
+      width: 8px; height: 14px;
+      background: var(--accent);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* --- SECTION --- */
     .section {
-      margin-bottom: 40px;
+      margin-bottom: 50px;
     }
 
     .section h2 {
-      border-left: 4px solid #888;
-      padding-left: 10px;
-      margin-bottom: 15px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
+    .section h2::before {
+      content: '>';
+      color: var(--accent2);
+    }
+
+    .section h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* --- POSTS --- */
     .post {
-      margin-bottom: 15px;
-      padding: 10px;
-      background-color: #fde8f0;
-      border-radius: 5px;
+      margin-bottom: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent2);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .post:hover {
+      border-color: var(--accent2);
+      background: var(--surface2);
+    }
+
+    .post:hover::before { opacity: 1; }
+
+    .post-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
     }
 
     .post a {
       text-decoration: none;
-      color: black;
-      font-weight: bold;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      transition: color 0.2s;
     }
+
+    .post:hover a { color: var(--accent2); }
 
     .post p {
-      margin: 5px 0 0;
-      font-size: 13px;
-      color: black;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
+    .tag {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      border: 1px solid var(--accent3);
+      color: var(--accent3);
+      border-radius: 2px;
+      margin-top: 8px;
+    }
+
+    /* --- GALLERY --- */
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
-    .gallery img {
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+
+    .gallery-item:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    .gallery-item img {
       width: 100%;
-      border-radius: 5px;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: opacity 0.2s, transform 0.3s;
     }
 
+    .gallery-item:hover img {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+
+    /* placeholder when no image */
+    .gallery-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .gallery-placeholder .icon {
+      font-size: 28px;
+      filter: grayscale(0.3);
+    }
+
+    .gallery-placeholder span {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* --- DIGIVICE BAR --- */
+    .digivice-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin-bottom: 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      flex-wrap: wrap;
+    }
+
+    .dv-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+      border: 1px solid;
+      cursor: default;
+      transition: box-shadow 0.2s;
+    }
+
+    .dv-badge:hover {
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .dv-1 { color: #00f0ff; border-color: #00f0ff; }
+    .dv-2 { color: #ff6ec7; border-color: #ff6ec7; }
+    .dv-3 { color: #7fff7f; border-color: #7fff7f; }
+    .dv-4 { color: #ffd700; border-color: #ffd700; }
+    .dv-5 { color: #ff8c69; border-color: #ff8c69; }
+
+    /* --- FOOTER --- */
     footer {
       text-align: center;
-      padding: 20px;
-      border-top: 1px solid #333;
-      font-size: 12px;
-      color: gray;
+      padding: 24px 20px;
+      border-top: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    footer .glow-text {
+      color: var(--accent);
+      text-shadow: var(--glow);
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Pixar Fan Log</h1>
+    <div class="header-tag">DIGITAL_WORLD_ACCESS :: v2.1</div>
+    <h1>DIGITAL WORLD LOG</h1>
+    <div class="subtitle">― デジモン ファンログ ―</div>
     <nav>
       <a href="index.html">HOME</a>
       <a href="blog.html">BLOG</a>
@@ -118,41 +393,78 @@
 
     <div class="intro">
       <p>
-        このサイトは『Pixar』のファンアートを置くための場所です。<br>
-        正しい解釈とかじゃなくて、「ここ好き」「なんか分からないけど良い」を大事にしてます。
+        デジモンのことが好きすぎて作ったファンサイトです。<br>
+        考察とかじゃなくて「ここ好き」「なんか分かんないけど泣ける」を残す場所。<br>
+        デジタルワールドの片隅で、ひっそり更新してます。<span class="cursor"></span>
       </p>
+    </div>
+
+    <!-- digivice badges -->
+    <div class="digivice-bar">
+      <span class="dv-badge dv-1">太一 &amp; アグモン</span>
+      <span class="dv-badge dv-2">空 &amp; ピヨモン</span>
+      <span class="dv-badge dv-3">ヤマト &amp; ガブモン</span>
+      <span class="dv-badge dv-4">光子郎 &amp; テントモン</span>
+      <span class="dv-badge dv-5">ミミ &amp; パルモン</span>
     </div>
 
     <div class="section">
       <h2>Latest Posts</h2>
 
       <div class="post">
-        <a href="blog.html">第○話のこのシーンが好きすぎる</a>
-        <p>感情がぐちゃぐちゃになるやつ</p>
+        <div class="post-meta">2026.05.20 &nbsp;|&nbsp; episode note</div>
+        <a href="blog.html">この戦闘シーン、何回見ても泣く</a>
+        <p>進化バンクの音楽と光の演出、ほんとに反則だと思う。</p>
+        <span class="tag">02</span>
       </div>
 
       <div class="post">
-        <a href="blog.html">この表情なんなんだろう</a>
-        <p>分からないけどめちゃくちゃ好き</p>
+        <div class="post-meta">2026.05.15 &nbsp;|&nbsp; character</div>
+        <a href="blog.html">ヤマトのこの表情がずっと頭から離れない</a>
+        <p>感情を出さないキャラが一瞬だけ崩れる瞬間、強すぎる。</p>
+        <span class="tag">01</span>
       </div>
 
+      <div class="post">
+        <div class="post-meta">2026.05.08 &nbsp;|&nbsp; fanart</div>
+        <a href="blog.html">落書き：メタルガルルモン習作</a>
+        <p>シルエットが複雑すぎてずっと苦手だったけどちゃんと向き合ってみた。</p>
+        <span class="tag">fanart</span>
+      </div>
     </div>
 
     <div class="section">
       <h2>Illustration</h2>
-
       <div class="gallery">
-        <img src="img1.jpg" alt="">
-        <img src="img2.jpg" alt="">
-        <img src="img3.jpg" alt="">
+        <!-- img1.jpg があれば src="img1.jpg" に書き換えてください -->
+        <div class="gallery-item">
+          <img src="img1.jpg" alt="fanart 1" onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+          <div class="gallery-placeholder" style="display:none;">
+            <span class="icon">🦕</span>
+            <span>img1.jpg</span>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="img2.jpg" alt="fanart 2" onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+          <div class="gallery-placeholder" style="display:none;">
+            <span class="icon">🐺</span>
+            <span>img2.jpg</span>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="img3.jpg" alt="fanart 3" onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+          <div class="gallery-placeholder" style="display:none;">
+            <span class="icon">🦋</span>
+            <span>img3.jpg</span>
+          </div>
+        </div>
       </div>
-
     </div>
 
   </div>
 
   <footer>
-    <p>© Fan Log</p>
+    <p><span class="glow-text">DIGITAL WORLD LOG</span> &nbsp;|&nbsp; © Fan Log &nbsp;|&nbsp; 二次創作・非公式</p>
   </footer>
 
 </body>
