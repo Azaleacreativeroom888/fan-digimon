@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GALLERY | Digital World Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --accent: #00f0ff;
+      --accent2: #ff6ec7;
+      --accent3: #7fff7f;
+      --text: #d4e8ff;
+      --muted: #5a7a9a;
+      --border: #1e3a5f;
+      --glow: 0 0 12px rgba(0, 240, 255, 0.4);
+      --glow2: 0 0 12px rgba(255, 110, 199, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* HEADER */
+    header {
+      padding: 28px 20px 18px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(0,240,255,0.04) 0%, transparent 100%);
+    }
+    .header-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 3px; margin-bottom: 8px;
+    }
+    header h1 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 32px; letter-spacing: 6px;
+      color: var(--accent); text-shadow: var(--glow);
+      animation: flicker 6s infinite;
+    }
+    @keyframes flicker {
+      0%,95%,100%{opacity:1} 96%{opacity:.7} 97%{opacity:1} 98%{opacity:.5} 99%{opacity:1}
+    }
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--accent2);
+      letter-spacing: 2px; margin-top: 6px;
+    }
+    nav {
+      display: flex; justify-content: center;
+      gap: 30px; margin-top: 16px;
+    }
+    nav a {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--muted); text-decoration: none;
+      font-size: 13px; letter-spacing: 2px;
+      transition: color .2s, text-shadow .2s;
+      position: relative; padding-bottom: 4px;
+    }
+    nav a::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; width: 0; height: 1px;
+      background: var(--accent); transition: width .3s;
+    }
+    nav a:hover { color: var(--accent); text-shadow: var(--glow); }
+    nav a:hover::after { width: 100%; }
+    nav a.active { color: var(--accent); }
+    nav a.active::after { width: 100%; }
+
+    /* CONTAINER */
+    .container {
+      max-width: 960px; margin: auto; padding: 40px 20px;
+    }
+
+    .page-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; letter-spacing: 4px;
+      color: var(--accent); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .page-title::before { content: '>'; color: var(--accent2); }
+    .page-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .page-note {
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 30px; line-height: 1.8;
+    }
+
+    /* FILTER TABS */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .filter-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      padding: 5px 14px; border-radius: 3px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    /* GALLERY GRID */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .gallery { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .gallery-item:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+      transform: translateY(-2px);
+    }
+
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .85;
+      transition: opacity .3s, transform .3s;
+    }
+    .gallery-item:hover img { opacity: 1; transform: scale(1.05); }
+
+    /* overlay on hover */
+    .item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.8) 100%);
+      opacity: 0; transition: opacity .3s;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 12px;
+    }
+    .gallery-item:hover .item-overlay { opacity: 1; }
+
+    .item-title {
+      font-size: 12px; font-weight: 700;
+      color: #fff; margin-bottom: 4px;
+    }
+    .item-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; padding: 2px 6px;
+      border-radius: 2px; border: 1px solid;
+      display: inline-block;
+    }
+    .tag-cyan  { color: var(--accent);  border-color: var(--accent); }
+    .tag-pink  { color: var(--accent2); border-color: var(--accent2); }
+    .tag-green { color: var(--accent3); border-color: var(--accent3); }
+
+    /* placeholder */
+    .gallery-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: var(--muted);
+    }
+    .gallery-placeholder .icon { font-size: 32px; }
+    .gallery-placeholder span {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.85);
+      z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 80vw; max-height: 80vh;
+    }
+    .lightbox-inner img {
+      max-width: 100%; max-height: 80vh;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .lightbox-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 28px; height: 28px;
+      background: var(--surface); border: 1px solid var(--accent2);
+      color: var(--accent2); border-radius: 50%;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lightbox-close:hover { background: var(--accent2); color: #000; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 24px 20px;
+      border-top: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted); letter-spacing: 2px;
+    }
+    footer .glow-text { color: var(--accent); text-shadow: var(--glow); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-tag">DIGITAL_WORLD_ACCESS :: v2.1</div>
+    <h1>DIGITAL WORLD LOG</h1>
+    <div class="subtitle">― デジモン ファンログ ―</div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="blog.html">BLOG</a>
+      <a href="gallery.html" class="active">GALLERY</a>
+      <a href="about.html">ABOUT</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="page-title">GALLERY</div>
+    <p class="page-note">落書きから清書まで。全部自分用の記録です。</p>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterGallery('all', this)">ALL</button>
+      <button class="filter-btn" onclick="filterGallery('sketch', this)">SKETCH</button>
+      <button class="filter-btn" onclick="filterGallery('illust', this)">ILLUST</button>
+      <button class="filter-btn" onclick="filterGallery('scene', this)">SCENE</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+
+      <!-- 画像がある場合は src="your-image.jpg" に書き換えてください -->
+
+      <div class="gallery-item" data-tag="illust" onclick="openLightbox(this)">
+        <img src="img1.jpg" alt="アグモン"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🦕</span>
+          <span>アグモン</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">アグモン</div>
+          <span class="item-tag tag-cyan">illust</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-tag="illust" onclick="openLightbox(this)">
+        <img src="img2.jpg" alt="メタルガルルモン"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🐺</span>
+          <span>メタルガルルモン</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">メタルガルルモン 習作</div>
+          <span class="item-tag tag-cyan">illust</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-tag="sketch" onclick="openLightbox(this)">
+        <img src="img3.jpg" alt="ガブモン 落書き"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🌙</span>
+          <span>ガブモン 落書き</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">ガブモン 落書き</div>
+          <span class="item-tag tag-pink">sketch</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-tag="scene" onclick="openLightbox(this)">
+        <img src="img4.jpg" alt="デジタルワールド"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🌐</span>
+          <span>デジタルワールド</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">デジタルワールドの夜</div>
+          <span class="item-tag tag-green">scene</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-tag="sketch" onclick="openLightbox(this)">
+        <img src="img5.jpg" alt="ピヨモン"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🦢</span>
+          <span>ピヨモン</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">ピヨモン メモ書き</div>
+          <span class="item-tag tag-pink">sketch</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-tag="illust" onclick="openLightbox(this)">
+        <img src="img6.jpg" alt="パルモン"
+          onerror="this.style.display='none'; this.parentNode.querySelector('.gallery-placeholder').style.display='flex';">
+        <div class="gallery-placeholder" style="display:none;">
+          <span class="icon">🌿</span>
+          <span>パルモン</span>
+        </div>
+        <div class="item-overlay">
+          <div class="item-title">パルモン</div>
+          <span class="item-tag tag-cyan">illust</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" src="" alt="">
+    </div>
+  </div>
+
+  <footer>
+    <p><span class="glow-text">DIGITAL WORLD LOG</span> &nbsp;|&nbsp; © Fan Log &nbsp;|&nbsp; 二次創作・非公式</p>
+  </footer>
+
+  <script>
+    function filterGallery(tag, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        item.style.display = (tag === 'all' || item.dataset.tag === tag) ? '' : 'none';
+      });
+    }
+
+    function openLightbox(item) {
+      const img = item.querySelector('img');
+      if (!img || img.style.display === 'none') return;
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
