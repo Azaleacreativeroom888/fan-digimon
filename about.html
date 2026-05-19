@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABOUT | Digital World Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --accent: #00f0ff;
+      --accent2: #ff6ec7;
+      --accent3: #7fff7f;
+      --text: #d4e8ff;
+      --muted: #5a7a9a;
+      --border: #1e3a5f;
+      --glow: 0 0 12px rgba(0, 240, 255, 0.4);
+      --glow2: 0 0 12px rgba(255, 110, 199, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none; z-index: 999;
+    }
+
+    /* HEADER */
+    header {
+      padding: 28px 20px 18px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(0,240,255,0.04) 0%, transparent 100%);
+    }
+    .header-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 3px; margin-bottom: 8px;
+    }
+    header h1 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 32px; letter-spacing: 6px;
+      color: var(--accent); text-shadow: var(--glow);
+      animation: flicker 6s infinite;
+    }
+    @keyframes flicker {
+      0%,95%,100%{opacity:1} 96%{opacity:.7} 97%{opacity:1} 98%{opacity:.5} 99%{opacity:1}
+    }
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--accent2);
+      letter-spacing: 2px; margin-top: 6px;
+    }
+    nav {
+      display: flex; justify-content: center;
+      gap: 30px; margin-top: 16px;
+    }
+    nav a {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--muted); text-decoration: none;
+      font-size: 13px; letter-spacing: 2px;
+      transition: color .2s, text-shadow .2s;
+      position: relative; padding-bottom: 4px;
+    }
+    nav a::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; width: 0; height: 1px;
+      background: var(--accent); transition: width .3s;
+    }
+    nav a:hover { color: var(--accent); text-shadow: var(--glow); }
+    nav a:hover::after { width: 100%; }
+    nav a.active { color: var(--accent); }
+    nav a.active::after { width: 100%; }
+
+    /* CONTAINER */
+    .container {
+      max-width: 780px; margin: auto; padding: 40px 20px 60px;
+    }
+
+    .page-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; letter-spacing: 4px;
+      color: var(--accent); margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .page-title::before { content: '>'; color: var(--accent2); }
+    .page-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* PROFILE BLOCK */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 30px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 560px) {
+      .profile-card { flex-direction: column; align-items: center; text-align: center; }
+    }
+
+    .avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--accent2);
+      box-shadow: var(--glow2);
+      background: var(--surface2);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .profile-info { flex: 1; }
+
+    .profile-name {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 20px;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      margin-bottom: 6px;
+    }
+
+    .profile-handle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .profile-bio {
+      font-size: 14px;
+      line-height: 2;
+      color: var(--text);
+    }
+
+    /* DATA TABLE */
+    .data-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .block-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-row {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(30, 58, 95, 0.4);
+      font-size: 14px;
+    }
+
+    .data-row:last-child { border-bottom: none; }
+
+    .data-key {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+
+    .data-val {
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .data-val .highlight {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    /* FAVE LIST */
+    .fave-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 480px) {
+      .fave-grid { grid-template-columns: 1fr; }
+    }
+
+    .fave-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      transition: border-color .2s;
+    }
+
+    .fave-item:hover { border-color: var(--accent); }
+
+    .fave-rank {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .fave-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .fave-note {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* RULES BLOCK */
+    .rules-list {
+      list-style: none;
+      margin-top: 4px;
+    }
+
+    .rules-list li {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.9;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(30,58,95,0.4);
+      display: flex;
+      gap: 10px;
+    }
+
+    .rules-list li:last-child { border-bottom: none; }
+
+    .rules-list li::before {
+      content: '//';
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--accent3);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 24px 20px;
+      border-top: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted); letter-spacing: 2px;
+    }
+    footer .glow-text { color: var(--accent); text-shadow: var(--glow); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-tag">DIGITAL_WORLD_ACCESS :: v2.1</div>
+    <h1>DIGITAL WORLD LOG</h1>
+    <div class="subtitle">― デジモン ファンログ ―</div>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="blog.html">BLOG</a>
+      <a href="gallery.html">GALLERY</a>
+      <a href="about.html" class="active">ABOUT</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="page-title">ABOUT</div>
+
+    <!-- PROFILE -->
+    <div class="profile-card">
+      <div class="avatar">
+        <!-- アイコン画像があれば: <img src="icon.jpg" alt=""> -->
+        🌐
+      </div>
+      <div class="profile-info">
+        <div class="profile-name">YOUR NAME</div>
+        <div class="profile-handle">@handle &nbsp;|&nbsp; digital world resident</div>
+        <p class="profile-bio">
+          デジモンが好きすぎて作ったファンサイトです。<br>
+          考察とかじゃなくて「ここ好き」「なんか分かんないけど泣ける」を残す場所。<br>
+          落書きと感情の記録をぼちぼち更新します。
+        </p>
+      </div>
+    </div>
+
+    <!-- BASIC DATA -->
+    <div class="data-block">
+      <div class="block-label">// PROFILE_DATA</div>
+      <div class="data-row">
+        <span class="data-key">NAME</span>
+        <span class="data-val"><span class="highlight">YOUR NAME</span></span>
+      </div>
+      <div class="data-row">
+        <span class="data-key">HISTORY</span>
+        <span class="data-val">子どもの頃からのファン。アニメ第1作からリアルタイムで見てた。</span>
+      </div>
+      <div class="data-row">
+        <span class="data-key">INTEREST</span>
+        <span class="data-val">ファンアート、キャラ考察、音楽、進化演出</span>
+      </div>
+      <div class="data-row">
+        <span class="data-key">TOOL</span>
+        <span class="data-val">iPad + Apple Pencil、Procreate</span>
+      </div>
+      <div class="data-row">
+        <span class="data-key">UPDATE</span>
+        <span class="data-val">気が向いたとき（不定期）</span>
+      </div>
+    </div>
+
+    <!-- FAVORITES -->
+    <div class="data-block">
+      <div class="block-label">// FAVORITE_DIGIMON</div>
+      <div class="fave-grid">
+        <div class="fave-item">
+          <div class="fave-rank">NO.1</div>
+          <div class="fave-name">メタルガルルモン</div>
+          <div class="fave-note">シルエットがかっこよすぎる。描くのが難しいのも込みで好き。</div>
+        </div>
+        <div class="fave-item">
+          <div class="fave-rank">NO.2</div>
+          <div class="fave-name">ガブモン</div>
+          <div class="fave-note">ヤマトとの関係性が好き。あの信頼感、ずるい。</div>
+        </div>
+        <div class="fave-item">
+          <div class="fave-rank">NO.3</div>
+          <div class="fave-name">ピヨモン</div>
+          <div class="fave-note">空との絆の描き方がずっと好き。健気さがたまらない。</div>
+        </div>
+        <div class="fave-item">
+          <div class="fave-rank">NO.4</div>
+          <div class="fave-name">アグモン</div>
+          <div class="fave-note">元気さと可愛さのバランスが完璧。主人公補正あっても好き。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div class="data-block">
+      <div class="block-label">// SITE_RULES</div>
+      <ul class="rules-list">
+        <li>このサイトは非公式のファンサイトです。バンダイ・東映アニメーションとは無関係です。</li>
+        <li>掲載しているイラストは全て自作の二次創作です。無断転載はご遠慮ください。</li>
+        <li>感想・ご意見は温かく受け取ります。ネガティブな内容はご遠慮ください。</li>
+        <li>リンクはご自由にどうぞ。報告は不要ですが、あると喜びます。</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer>
+    <p><span class="glow-text">DIGITAL WORLD LOG</span> &nbsp;|&nbsp; © Fan Log &nbsp;|&nbsp; 二次創作・非公式</p>
+  </footer>
+
+</body>
+</html>
