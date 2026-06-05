@@ -9,265 +9,78 @@
     :root {
       --bg: #0a0e1a;
       --surface: #111827;
-      --surface2: #1a2236;
       --accent: #00f0ff;
       --accent2: #ff6ec7;
-      --accent3: #7fff7f;
       --text: #d4e8ff;
       --muted: #5a7a9a;
       --border: #1e3a5f;
       --glow: 0 0 12px rgba(0, 240, 255, 0.4);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Noto Sans JP', sans-serif;
       min-height: 100vh;
     }
-
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.08) 2px,
-        rgba(0,0,0,0.08) 4px
-      );
-      pointer-events: none;
-      z-index: 999;
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+      pointer-events: none; z-index: 999;
     }
-
-    /* --- HEADER --- */
     header {
       padding: 28px 20px 18px;
       text-align: center;
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, rgba(0,240,255,0.04) 0%, transparent 100%);
     }
+    .header-tag { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 3px; margin-bottom: 8px; }
+    header h1 { font-family: 'Share Tech Mono', monospace; font-size: 32px; letter-spacing: 6px; color: var(--accent); text-shadow: var(--glow); animation: flicker 6s infinite; }
+    @keyframes flicker { 0%,95%,100%{opacity:1} 96%{opacity:.7} 97%{opacity:1} 98%{opacity:.5} 99%{opacity:1} }
+    .subtitle { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent2); letter-spacing: 2px; margin-top: 6px; }
+    nav { display: flex; justify-content: center; gap: 30px; margin-top: 16px; }
+    nav a { font-family: 'Share Tech Mono', monospace; color: var(--muted); text-decoration: none; font-size: 13px; letter-spacing: 2px; transition: color .2s; position: relative; padding-bottom: 4px; }
+    nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--accent); transition: width .3s; }
+    nav a:hover, nav a.active { color: var(--accent); text-shadow: var(--glow); }
+    nav a:hover::after, nav a.active::after { width: 100%; }
 
-    .header-tag {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 3px;
-      margin-bottom: 8px;
-    }
+    .container { max-width: 700px; margin: auto; padding: 40px 20px; }
 
-    header h1 {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 32px;
-      letter-spacing: 6px;
-      color: var(--accent);
-      text-shadow: var(--glow);
-      animation: flicker 6s infinite;
-    }
-
-    @keyframes flicker {
-      0%, 95%, 100% { opacity: 1; }
-      96% { opacity: 0.7; }
-      97% { opacity: 1; }
-      98% { opacity: 0.5; }
-      99% { opacity: 1; }
-    }
-
-    .subtitle {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      color: var(--accent2);
-      letter-spacing: 2px;
-      margin-top: 6px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 16px;
-    }
-
-    nav a {
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 13px;
-      letter-spacing: 2px;
-      transition: color 0.2s, text-shadow 0.2s;
-      position: relative;
-      padding-bottom: 4px;
-    }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0; height: 1px;
-      background: var(--accent);
-      transition: width 0.3s;
-    }
-
-    nav a:hover { color: var(--accent); text-shadow: var(--glow); }
-    nav a:hover::after { width: 100%; }
-    nav a.active { color: var(--accent); }
-    nav a.active::after { width: 100%; }
-
-    /* --- CONTAINER --- */
-    .container {
-      max-width: 860px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-
-    /* --- PAGE TITLE --- */
     .page-title {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      letter-spacing: 4px;
-      color: var(--accent);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-size: 13px; letter-spacing: 4px;
+      color: var(--accent); margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
     }
-
     .page-title::before { content: '>'; color: var(--accent2); }
-    .page-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, var(--border), transparent);
-    }
+    .page-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
 
-    /* --- POST CARD --- */
-    .post {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 28px 30px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-
-    .post:hover {
-      border-color: var(--accent2);
-    }
-
-    .post::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent2), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .post:hover::before { opacity: 1; }
-
-    .post-header {
-      margin-bottom: 18px;
-    }
-
-    .post h2 {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-
-    .post-meta {
+    /* 日記エントリ */
+    .entry {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 20px;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(30,58,95,0.5);
     }
-
-    .date {
+    .entry:last-child { border-bottom: none; }
+    .entry .date {
       font-family: 'Share Tech Mono', monospace;
       font-size: 11px;
       color: var(--muted);
       letter-spacing: 1px;
+      flex-shrink: 0;
+      min-width: 90px;
     }
-
-    .tag {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 2px;
-      border: 1px solid;
-      letter-spacing: 1px;
-    }
-
-    .tag-ep  { color: #00f0ff; border-color: #00f0ff; }
-    .tag-ch  { color: #ff6ec7; border-color: #ff6ec7; }
-    .tag-art { color: #7fff7f; border-color: #7fff7f; }
-    .tag-mus { color: #ffd700; border-color: #ffd700; }
-
-    /* --- POST CONTENT --- */
-    .content {
-      border-top: 1px solid var(--border);
-      padding-top: 18px;
-    }
-
-    .content p {
+    .entry .text {
       font-size: 14px;
-      line-height: 2;
+      line-height: 1.8;
       color: var(--text);
-      margin-bottom: 12px;
     }
 
-    .content p:last-child { margin-bottom: 0; }
-
-    /* spoiler block */
-    .spoiler-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      color: var(--accent2);
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .spoiler-block {
-      border-left: 2px solid var(--accent2);
-      padding-left: 14px;
-      margin: 14px 0;
-    }
-
-    /* quote */
-    .quote {
-      border-left: 2px solid var(--accent);
-      padding-left: 14px;
-      margin: 14px 0;
-      color: var(--muted);
-      font-style: italic;
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    /* --- FOOTER --- */
-    footer {
-      text-align: center;
-      padding: 24px 20px;
-      border-top: 1px solid var(--border);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 2px;
-    }
-
-    footer .glow-text {
-      color: var(--accent);
-      text-shadow: var(--glow);
-    }
+    footer { text-align: center; padding: 24px 20px; border-top: 1px solid var(--border); font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; }
+    footer .glow-text { color: var(--accent); text-shadow: var(--glow); }
   </style>
 </head>
 <body>
@@ -287,130 +100,34 @@
   <div class="container">
     <div class="page-title">BLOG</div>
 
-    <div class="post">
-      <div class="post-header">
-        <h2>太一ガチ恋</h2>
-        <div class="post-meta">
-          <span class="date">2026.06.01</span>
-          <span class="tag tag-ep">episode</span>
-          <span class="tag tag-ch">太一</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          太一が好きなのは今も昔も変わらない。<br>
-          光にとってのいいお兄ちゃん像を完璧にこなしてて、カッコよく見えるんだよな。<br>
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.06.05</span>
+      <span class="text">太一と光子郎って意外と口悪いんだよね。後で観返すと気が付く。でも、そこも良いんだよね。それぞれに性格の濃いキャラが仲良く頑張っていくのが観てて面白い。</span>
     </div>
 
-    <!-- 記事① -->
-    <div class="post">
-      <div class="post-header">
-        <h2>丈先輩！？</h2>
-        <div class="post-meta">
-          <span class="date">2026.05.21</span>
-          <span class="tag tag-ep">episode</span>
-          <span class="tag tag-ch">丈</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          AIにこのホームページをお洒落にしてって頼んだらホームに丈さんとゴマモンの名前だけなくて笑った。<br>
-          丈さんってこういう役回りだよな……<br>
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.06.01</span>
+      <span class="text">太一が好きなのは今も昔も変わらない。光にとってのいいお兄ちゃん像を完璧にこなしてて、カッコよく見えるんだよな。</span>
     </div>
-
-    <!-- 記事① -->
-    <div class="post">
-      <div class="post-header">
-        <h2>メタルガルルモンの進化シーン、何回見ても泣く</h2>
-        <div class="post-meta">
-          <span class="date">2026.05.20</span>
-          <span class="tag tag-ep">episode</span>
-          <span class="tag tag-ch">ヤマト</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          進化バンクの演出が本当に好きすぎる。音楽と光の組み合わせが反則。
-        </p>
-        <div class="spoiler-block">
-          <span class="spoiler-label">// SPOILER</span>
-          <p>
-            特にガブモンがヤマトの顔を見てから光に包まれる一瞬。
-            あの「信頼してるよ」みたいな間が全部語ってる気がして、毎回そこで止まってしまう。
-          </p>
-        </div>
-        <p>
-          セリフのない表情で全部伝わる作画、本当にすごい。
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.05.21</span>
+      <span class="text">AIにホームページをお洒落にしてって頼んだらホームに丈さんとゴマモンの名前だけなくて笑った。丈さんってこういう役回りだよな……</span>
     </div>
-
-    <!-- 記事② -->
-    <div class="post">
-      <div class="post-header">
-        <h2>ヤマトのこの表情がずっと頭から離れない</h2>
-        <div class="post-meta">
-          <span class="date">2026.05.15</span>
-          <span class="tag tag-ch">キャラ</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          感情を出さないキャラが一瞬だけ崩れる瞬間、なんで毎回こんなに強いんだろう。
-        </p>
-        <div class="quote">
-          「強くなきゃ、守れないから。」
-        </div>
-        <p>
-          このセリフの文脈で見るとあの表情の意味が全然違って見えてくる。
-          分かんないけど、めちゃくちゃ好き。
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.05.20</span>
+      <span class="text">メタルガルルモンの進化シーン、何回見ても泣く。進化バンクの演出が本当に好きすぎる。音楽と光の組み合わせが反則。</span>
     </div>
-
-    <!-- 記事③ -->
-    <div class="post">
-      <div class="post-header">
-        <h2>落書き：メタルガルルモン習作</h2>
-        <div class="post-meta">
-          <span class="date">2026.05.08</span>
-          <span class="tag tag-art">fanart</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          シルエットが複雑すぎてずっと苦手だったけど、ちゃんと向き合ってみた。
-        </p>
-        <p>
-          脚の関節の数が多くて毎回迷子になるんだけど、今回はなんとかそれっぽくなった気がする。
-          完成したらギャラリーにあげます。
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.05.15</span>
+      <span class="text">感情を出さないキャラが一瞬だけ崩れる瞬間、なんで毎回こんなに強いんだろう。分かんないけど、めちゃくちゃ好き。</span>
     </div>
-
-    <!-- 記事④ -->
-    <div class="post">
-      <div class="post-header">
-        <h2>デジモンの音楽が今でも脳内リピートしてる</h2>
-        <div class="post-meta">
-          <span class="date">2026.04.28</span>
-          <span class="tag tag-mus">music</span>
-        </div>
-      </div>
-      <div class="content">
-        <p>
-          「Butter-Fly」を久しぶりに聴いたら普通に泣いた。
-          イントロだけで記憶が全部戻ってくる感覚、すごい。
-        </p>
-        <p>
-          あの時代のアニメソングって、なんであんなに全力なんだろう。
-          疾走感と切なさが同時にあって、それがデジモンの空気感そのままだった気がする。
-        </p>
-      </div>
+    <div class="entry">
+      <span class="date">2026.05.08</span>
+      <span class="text">メタルガルルモン習作。シルエットが複雑すぎてずっと苦手だったけど、ちゃんと向き合ってみた。完成したらギャラリーにあげます。</span>
+    </div>
+    <div class="entry">
+      <span class="date">2026.04.28</span>
+      <span class="text">「Butter-Fly」を久しぶりに聴いたら普通に泣いた。イントロだけで記憶が全部戻ってくる感覚、すごい。</span>
     </div>
 
   </div>
